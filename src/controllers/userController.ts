@@ -78,3 +78,14 @@ export const deleteUser = async (req: IncomingMessage, res: ServerResponse, id: 
     res.writeHead(204, {'Content-Type': 'application/json'})
     res.end(JSON.stringify(null))
 }
+
+export const notFound = async (req: IncomingMessage, res: ServerResponse) => {
+    res.writeHead(404, {'Content-Type': 'application/json'})
+    res.end(JSON.stringify({message: 'Route Not Found'}))
+}
+
+
+export const fatalError = async (req: IncomingMessage, res: ServerResponse, err: Error) => {
+    res.writeHead(500, {'Content-Type': 'application/json'})
+    res.end(JSON.stringify({message: `Internal Server Error: ${err.message}`}))
+}
