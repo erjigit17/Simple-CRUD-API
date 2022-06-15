@@ -1,4 +1,3 @@
-import {UserType} from '../types/userTypes'
+import {IUser} from '../interface/user.interface'
 
-
-export const users = [] as UserType[]
+export const users:IUser[]  = []

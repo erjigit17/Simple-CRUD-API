@@ -1,8 +1,8 @@
 import * as User from '../models/userModel.js'
-import {UserType} from '../types/userTypes'
+import {IBaseUser} from '../interface/user.interface'
 import { ServerResponse, IncomingMessage } from 'http'
 
-export const getUser = async (req: IncomingMessage, res: ServerResponse, id: string) => {
+export const getUser = async (req: IncomingMessage, res: ServerResponse, id: string): Promise<void> => {
     const user = await User.findById(id)
 
     if(!user) {
@@ -16,7 +16,7 @@ export const getUser = async (req: IncomingMessage, res: ServerResponse, id: str
 
 }
 
-export const getUsers = async (req: IncomingMessage, res: ServerResponse) => {
+export const getUsers = async (req: IncomingMessage, res: ServerResponse): Promise<void> => {
     const users = await User.findAll()
 
     res.writeHead(200, {'Content-Type': 'application/json'})
@@ -24,7 +24,7 @@ export const getUsers = async (req: IncomingMessage, res: ServerResponse) => {
 }
 
 
-export const createUser = async(req: IncomingMessage, res: ServerResponse) =>{
+export const createUser = async(req: IncomingMessage, res: ServerResponse): Promise<void> =>{
     let body = ''
 
     req.on('data', (chunk: Buffer) => {
@@ -33,7 +33,7 @@ export const createUser = async(req: IncomingMessage, res: ServerResponse) =>{
 
     req.on('end', async() => {
 
-        let user = {} as UserType
+        let user = {} as IBaseUser
         try{
             user = JSON.parse(body)
         } catch (err) {
@@ -51,14 +51,14 @@ export const createUser = async(req: IncomingMessage, res: ServerResponse) =>{
 }
 
 
-export const updatedUser = async (req: IncomingMessage, res: ServerResponse, id: string) =>{
+export const updatedUser = async (req: IncomingMessage, res: ServerResponse, id: string): Promise<void> =>{
     let body = ''
     req.on('data', (chunk: Buffer) => {
         body += chunk.toString()
     })
 
     req.on('end', async() => {
-        let user = {} as UserType
+        let user = {} as IBaseUser
         try{
             user = JSON.parse(body)
         } catch (err) {
@@ -73,19 +73,19 @@ export const updatedUser = async (req: IncomingMessage, res: ServerResponse, id:
     })
 }
 
-export const deleteUser = async (req: IncomingMessage, res: ServerResponse, id: string) =>{
+export const deleteUser = async (req: IncomingMessage, res: ServerResponse, id: string): Promise<void> =>{
      await User._delete(id)
     res.writeHead(204, {'Content-Type': 'application/json'})
     res.end(JSON.stringify(null))
 }
 
-export const notFound = async (req: IncomingMessage, res: ServerResponse) => {
+export const notFound = async (req: IncomingMessage, res: ServerResponse): Promise<void> => {
     res.writeHead(404, {'Content-Type': 'application/json'})
     res.end(JSON.stringify({message: 'Route Not Found'}))
 }
 
 
-export const fatalError = async (req: IncomingMessage, res: ServerResponse, err: Error) => {
+export const fatalError = async (req: IncomingMessage, res: ServerResponse, err: Error): Promise<void> => {
     res.writeHead(500, {'Content-Type': 'application/json'})
     res.end(JSON.stringify({message: `Internal Server Error: ${err.message}`}))
 }
