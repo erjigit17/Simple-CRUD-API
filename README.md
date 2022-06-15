@@ -1,13 +1,14 @@
 # Simple-CRUD-API
 
 ## Instruction
-1. git clone https://github.com/erjigit17/Simple-CRUD-API
-2. git checkout dev
+1. `git clone https://github.com/erjigit17/Simple-CRUD-API`
+2. `git checkout dev`
 3. .env_example rename to .env
-4. npm i
-5. npm run lint
-6. npm run start:dev (or start:prod)
-7. npm run test
+4. `npm i`
+5. `npm run lint`
+6. `npm run start:dev` or `npm run start:prod`
+7. `npm run kill`  to kill server on port 4000. If faced `Error: listen EADDRINUSE: address already in use :::4000`
+8. `npm run test`
 
 ##Postman tests:
 
@@ -38,7 +39,8 @@ body:
 ```json
 {
   "name": "John",
-  "age": 26
+  "age": 26,
+  "hobbies": []
 }
 ```
 Response: `200 OK`
@@ -46,7 +48,8 @@ Response: `200 OK`
 {
     "id": "4815d3af-7534-4758-a75b-0f6269229dcc",
     "name": "John",
-    "age": 26
+    "age": 26,
+    "hobbies": []
 }
 ````
 #### GET localhost:4000/api/v1/users/4815d3af-7534-4758-a75b-0f6269229dcc
@@ -55,7 +58,8 @@ Response: `200 OK`
 {
   "id": "4815d3af-7534-4758-a75b-0f6269229dcc",
   "name": "John",
-  "age": 26
+  "age": 26,
+  "hobbies": []
 }
 ```
 #### GET localhost:4000/api/v1/users
@@ -66,14 +70,15 @@ Response: `200 OK`
   {
     "id": "4815d3af-7534-4758-a75b-0f6269229dcc",
     "name": "John",
-    "age": 26
+    "age": 26,
+    "hobbies": []
   }
 ]
 ```
 #### DELETE localhost:4000/api/v1/users/4815d3af-7534-4758-a75b-0f6269229dcc 
 Response: `204 No Content`
 
-## Tests invalid uuid
+## Test invalid uuid
 #### GET localhost:4000/api/v1/users/12345
 Response: `400 Bad Request`
 
@@ -82,7 +87,7 @@ Response: `400 Bad Request`
   "message": "userId invalid, not a valid uuid"
 }
 ```
-## Tests not found
+## Test not found
 #### DELETE localhost:4000/api/v1/users/4815d3af-7534-4758-a75b-0f6269229dcc
 #### GET localhost:4000/api/v1/users/4815d3af-7534-4758-a75b-0f6269229dcc
 Response: `404 Not Found`
@@ -91,20 +96,49 @@ Response: `404 Not Found`
     "message": "User not found"
 }
 ```
-## Tests invalid body
+## Test invalid body
 #### POST localhost:4000/api/v1/users
 body:
 ```json
 {
   "age": 42,
-  "hobbies": [
-    "Hiking", "Reading"
-  ]
+  "hobbies": []
 }
 ```
 Response: `400 Bad Request`
 ```json
 {
     "message": "Request body does not contain required fields"
+}
+```
+## Test invalid JSON
+#### POST localhost:4000/api/v1/users
+body:
+```
+{
+  "age": 42,
+  "hobbies": [
+    "Hiking", "Reading"
+```
+Response: `400 Bad Request`
+```json
+{
+    "message": "Bad request error: Invalid JSON"
+}
+```
+## Test invalid types
+#### POST localhost:4000/api/v1/users
+body:
+```json
+{
+    "name": "John",
+    "age": "26",
+    "hobbies": []
+}
+```
+Response: `400 Bad Request`
+```json
+{
+    "message": "Bad request error: Property \"age\" is not of type: number"
 }
 ```
