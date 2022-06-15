@@ -1,7 +1,9 @@
 import http, {ServerResponse, IncomingMessage} from 'http'
 import {getUsers, getUser, createUser, updatedUser, deleteUser} from './controllers/userController.js'
 import {parseId} from './utils/parseId.js'
-const PORT = process.env.PORT || 4000
+import {settings} from './settings.js'
+
+const PORT = settings.PORT
 
 const server = http.createServer(async (req: IncomingMessage, res: ServerResponse) => {
 
