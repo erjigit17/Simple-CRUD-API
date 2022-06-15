@@ -1,26 +1,28 @@
 import * as User from '../models/userModel.js'
 import {IBaseUser} from '../interface/user.interface'
 import { ServerResponse, IncomingMessage } from 'http'
+import { userPostDTO } from '../scemas/userPostDTO.js'
+import { chekReqBody } from '../scemas/chekReqBody.js'
+
+async function sendResponse(res: ServerResponse, status: number, body: object) {
+    res.writeHead(status, {'Content-Type': 'application/json'})
+    res.end(JSON.stringify(body))
+}
 
 export const getUser = async (req: IncomingMessage, res: ServerResponse, id: string): Promise<void> => {
     const user = await User.findById(id)
 
     if(!user) {
-        res.writeHead(404, {'Content-Type': 'application/json'})
-        res.end(JSON.stringify({message: 'User not found'}))
+        await sendResponse(res, 404, ({message: 'User Not Found'}))
         return
     }
 
-    res.writeHead(200, {'Content-Type': 'application/json'})
-    res.end(JSON.stringify(user))
-
+    await sendResponse(res, 200, user)
 }
 
 export const getUsers = async (req: IncomingMessage, res: ServerResponse): Promise<void> => {
     const users = await User.findAll()
-
-    res.writeHead(200, {'Content-Type': 'application/json'})
-    res.end(JSON.stringify(users))
+    await sendResponse(res, 200, users)
 }
 
 
@@ -32,26 +34,30 @@ export const createUser = async(req: IncomingMessage, res: ServerResponse): Prom
     })
 
     req.on('end', async() => {
-
         let user = {} as IBaseUser
-        try{
-            user = JSON.parse(body)
+        try {
+            user = chekReqBody(body, userPostDTO)
         } catch (err) {
-            res.writeHead(400, {'Content-Type': 'application/json'})
-            res.end(JSON.stringify({message: 'Invalid JSON'}))
+            let error = new Error('Invalid request body')
+            if (err instanceof Error) error = err
+            await badRequest (req, res, error)
             return
         }
-
         const out = await User.create(user)
 
-        res.writeHead(201, {'Content-Type': 'application/json'})
-        res.end(JSON.stringify(out))
-
+        await sendResponse(res, 201, out)
     })
 }
 
 
 export const updatedUser = async (req: IncomingMessage, res: ServerResponse, id: string): Promise<void> =>{
+    const _user = await User.findById(id)
+
+    if(!_user) {
+        await sendResponse(res, 404, ({message: 'User Not Found'}))
+        return
+    }
+
     let body = ''
     req.on('data', (chunk: Buffer) => {
         body += chunk.toString()
@@ -59,33 +65,41 @@ export const updatedUser = async (req: IncomingMessage, res: ServerResponse, id:
 
     req.on('end', async() => {
         let user = {} as IBaseUser
-        try{
-            user = JSON.parse(body)
+        try {
+            user = chekReqBody(body, userPostDTO)
         } catch (err) {
-            res.writeHead(400, {'Content-Type': 'application/json'})
-            res.end(JSON.stringify({message: 'Invalid JSON'}))
+            let error = new Error('Invalid request body')
+            if (err instanceof Error) error = err
+            await badRequest (req, res, error)
             return
         }
 
         const out = await User.update(id, user)
-        res.writeHead(200, {'Content-Type': 'application/json'})
-        res.end(JSON.stringify(out))
+
+        await sendResponse(res, 200, out)
     })
 }
 
-export const deleteUser = async (req: IncomingMessage, res: ServerResponse, id: string): Promise<void> =>{
-     await User._delete(id)
-    res.writeHead(204, {'Content-Type': 'application/json'})
-    res.end(JSON.stringify(null))
+export async function deleteUser (req: IncomingMessage, res: ServerResponse, id: string): Promise<void> {
+    const _user = await User.findById(id)
+
+    if(!_user) {
+        await sendResponse(res, 404, ({message: 'User Not Found'}))
+        return
+    }
+
+    await User._delete(id)
+    await sendResponse(res, 204, {})
 }
 
-export const notFound = async (req: IncomingMessage, res: ServerResponse): Promise<void> => {
-    res.writeHead(404, {'Content-Type': 'application/json'})
-    res.end(JSON.stringify({message: 'Route Not Found'}))
+export async function notFound (req: IncomingMessage, res: ServerResponse): Promise<void> {
+    await sendResponse(res, 404, ({message: 'Route Not Found'}))
 }
 
+export async function fatalError (req: IncomingMessage, res: ServerResponse, err: Error): Promise<void> {
+    await sendResponse(res, 500, ({message: `Internal Server Error: ${err.message}`}))
+}
 
-export const fatalError = async (req: IncomingMessage, res: ServerResponse, err: Error): Promise<void> => {
-    res.writeHead(500, {'Content-Type': 'application/json'})
-    res.end(JSON.stringify({message: `Internal Server Error: ${err.message}`}))
+export async function badRequest (req: IncomingMessage, res: ServerResponse, err: Error): Promise<void> {
+    await sendResponse(res, 400, ({message: `Bad request error: ${err.message}`}))
 }
