@@ -96,8 +96,8 @@ export async function notFound (req: IncomingMessage, res: ServerResponse): Prom
     await sendResponse(res, 404, ({message: 'Route Not Found'}))
 }
 
-export async function fatalError (req: IncomingMessage, res: ServerResponse, err: Error): Promise<void> {
-    await sendResponse(res, 500, ({message: `Internal Server Error: ${err.message}`}))
+export async function fatalError (req: IncomingMessage, res: ServerResponse, errorMessage: string): Promise<void> {
+    await sendResponse(res, 500, ({message: `Internal Server Error: ${errorMessage}`}))
 }
 
 export async function badRequest (req: IncomingMessage, res: ServerResponse, err: Error): Promise<void> {
