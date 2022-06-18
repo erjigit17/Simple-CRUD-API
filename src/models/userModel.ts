@@ -39,10 +39,8 @@ export const _delete = async (id: string): Promise<void> => {
 
 async function sendToPrimary(data: IUser | null, command: commandType, id: string | null){
     if (cluster.isWorker) {
-        // @ts-ignore
-        const workerId = cluster.worker.id
-        // @ts-ignore
-        process.send({workerId, command, data, id})
+        const workerId = cluster?.worker?.id
+        process.send?.({workerId, command, data, id})
     }
 }
 
