@@ -5,7 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "tsc && NODE_OPTIONS=--experimental-vm-modules jest --testMatch \"<rootDir>/dist/test/e2e/test/*.test.js\" --noStackTrace --runInBand",
     "start:dev": "nodemon --exec npx ts-node-esm src/server.ts",
     "start:prod": "tsc && node ./dist/server.js",
     "start:multi": "tsc && node ./dist/cluster.js",
@@ -26,7 +26,9 @@
   "homepage": "https://github.com/erjigit17/Simple-CRUD-API#readme",
   "devDependencies": {
     "@types/dotenv": "^8.2.0",
+    "@types/jest": "^28.1.2",
     "@types/node": "^17.0.42",
+    "@types/supertest": "^2.0.12",
     "@typescript-eslint/eslint-plugin": "^5.28.0",
     "@typescript-eslint/parser": "^5.28.0",
     "eslint": "^8.17.0",
@@ -38,6 +40,8 @@
   "dependencies": {
     "@types/uuid": "^8.3.4",
     "dotenv": "^16.0.1",
+    "jest": "27.3.1",
+    "supertest": "6.1.6",
     "uuid": "^8.3.2"
   }
 }

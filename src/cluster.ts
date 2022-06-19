@@ -23,7 +23,7 @@ if (cluster.isPrimary) {
     })
 
     server.listen(PORT, () =>
-        console.log(`Process ${process.pid} is listening to all incoming requests`)
+        console.log(`Process ${process.pid} is listening PORT: ${PORT} to all incoming requests`)
     )
 }
 
