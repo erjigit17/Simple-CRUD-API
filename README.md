@@ -11,6 +11,17 @@
 8. `npm run  start:multi` use several different browsers at the same time, and watch the messages in the terminal
 9. `npm run test` 12 cases, grouped by http methods
 
+## Attention!
+###You can test only when the server is running!
+
+Test start on another terminal. For example:
+
+Terminal 1.
+Start app: `npm run  start:multi`
+
+Terminal 2.
+Start test: `npm run test`
+
 ##Postman tests:
 
 #### POST localhost:4000/api/v1/users
@@ -47,14 +58,14 @@ body:
 Response: `200 OK`
 ```json
 {
-    "id": "4815d3af-7534-4758-a75b-0f6269229dcc",
-    "name": "John",
-    "age": 26,
-    "hobbies": []
+  "id": "4815d3af-7534-4758-a75b-0f6269229dcc",
+  "name": "John",
+  "age": 26,
+  "hobbies": []
 }
 ````
 #### GET localhost:4000/api/v1/users/4815d3af-7534-4758-a75b-0f6269229dcc
-Response: `200 OK` 
+Response: `200 OK`
 ```json
 {
   "id": "4815d3af-7534-4758-a75b-0f6269229dcc",
@@ -76,7 +87,7 @@ Response: `200 OK`
   }
 ]
 ```
-#### DELETE localhost:4000/api/v1/users/4815d3af-7534-4758-a75b-0f6269229dcc 
+#### DELETE localhost:4000/api/v1/users/4815d3af-7534-4758-a75b-0f6269229dcc
 Response: `204 No Content`
 
 ## Test invalid uuid
@@ -94,7 +105,7 @@ Response: `400 Bad Request`
 Response: `404 Not Found`
 ```json
 {
-    "message": "User not found"
+  "message": "User not found"
 }
 ```
 ## Test invalid body
@@ -109,7 +120,7 @@ body:
 Response: `400 Bad Request`
 ```json
 {
-    "message": "Request body does not contain required fields"
+  "message": "Request body does not contain required fields"
 }
 ```
 ## Test invalid JSON
@@ -124,7 +135,7 @@ body:
 Response: `400 Bad Request`
 ```json
 {
-    "message": "Bad request error: Invalid JSON"
+  "message": "Bad request error: Invalid JSON"
 }
 ```
 ## Test invalid types
@@ -132,14 +143,14 @@ Response: `400 Bad Request`
 body:
 ```json
 {
-    "name": "John",
-    "age": "26",
-    "hobbies": []
+  "name": "John",
+  "age": "26",
+  "hobbies": []
 }
 ```
 Response: `400 Bad Request`
 ```json
 {
-    "message": "Bad request error: Property \"age\" is not of type: number"
+  "message": "Bad request error: Property \"age\" is not of type: number"
 }
 ```
