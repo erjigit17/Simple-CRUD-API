@@ -11,6 +11,17 @@
 8. `npm run  start:multi` use several different browsers at the same time, and watch the messages in the terminal
 9. `npm run test` 12 cases, grouped by http methods
 
+## Attention!
+###You can test only when the server is running!
+
+Test start on another terminal. For example:
+
+Terminal 1.
+Start app: `npm run  start:multi`
+
+Terminal 2.
+Start test: `npm run test`
+
 ##Postman tests:
 
 #### POST localhost:4000/api/v1/users
