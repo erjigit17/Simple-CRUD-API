@@ -9,7 +9,7 @@
 6. `npm run start:dev` or `npm run start:prod`
 7. `npm run kill`  to kill server on port 4000. If faced `Error: listen EADDRINUSE: address already in use :::4000`
 8. `npm run  start:multi` use several different browsers at the same time, and watch the messages in the terminal
-9. `npm run test`
+9. `npm run test` 12 cases, grouped by http methods
 
 ##Postman tests:
 
