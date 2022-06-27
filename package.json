@@ -5,7 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "tsc && NODE_OPTIONS=--experimental-vm-modules jest --testMatch \"<rootDir>/dist/test/e2e/test/*.test.js\" --noStackTrace --runInBand",
+    "test": "tsc && cross-env NODE_OPTIONS=--experimental-vm-modules jest --testMatch \"<rootDir>/dist/test/e2e/test/*.test.js\" --noStackTrace --runInBand",
     "start:dev": "nodemon --exec npx ts-node-esm src/server.ts",
     "start:prod": "tsc && node ./dist/server.js",
     "start:multi": "tsc && node ./dist/cluster.js",
@@ -31,6 +31,7 @@
     "@types/supertest": "^2.0.12",
     "@typescript-eslint/eslint-plugin": "^5.28.0",
     "@typescript-eslint/parser": "^5.28.0",
+    "cross-env": "^7.0.3",
     "eslint": "^8.17.0",
     "nodemon": "^2.0.16",
     "ts-node": "^10.8.1",
